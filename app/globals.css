@@ -1,26 +1,87 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f4f5fb;
+  --foreground: #12203a;
+  --card: #ffffff;
+  --card-foreground: #12203a;
+  --popover: #ffffff;
+  --popover-foreground: #12203a;
+  --primary: #377ef6;
+  --magenta: #ec4899;
+  --sunset: #ff7b3c;
+  --primary-foreground: #fbfdff;
+  --secondary: #eef4ff;
+  --secondary-foreground: #243457;
+  --muted: #f2f5fc;
+  --muted-foreground: #64748b;
+  --accent: #e5edff;
+  --accent-foreground: #243457;
+  --destructive: #d6455d;
+  --destructive-foreground: #fff7f7;
+  --border: #dbe3f1;
+  --input: #d4def0;
+  --ring: #5b8cff;
+  --gradient-brand: linear-gradient(135deg, #2894ef 0%, #8b5cf6 42%, #ec4899 74%, #ff7b3c 100%);
+  --gradient-surface: radial-gradient(circle at top left, rgba(255, 255, 255, 0.9), transparent 34%),
+    radial-gradient(circle at top right, rgba(80, 148, 255, 0.18), transparent 28%),
+    radial-gradient(circle at bottom left, rgba(255, 146, 106, 0.14), transparent 30%),
+    linear-gradient(135deg, #f7f3f8 0%, #eef3fc 48%, #edf5ff 100%);
+  --gradient-login-hero: linear-gradient(180deg, #6a2da5 0%, #8d33b6 12%, #c43bba 34%, #f05e87 58%, #ff7f52 100%);
+  --app-login-shell: linear-gradient(135deg, #f4f2f8 0%, #eef2fb 40%, #edf6ff 100%);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-manrope);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--border);
+}
+
+html {
+  background: var(--background);
 }
 
 body {
-  background: var(--background);
+  min-height: 100vh;
+  background: var(--gradient-surface);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-manrope), sans-serif;
+}
+
+a,
+button,
+input {
+  transition:
+    color 150ms ease,
+    border-color 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+::selection {
+  background: rgba(55, 126, 246, 0.2);
+  color: var(--foreground);
 }
