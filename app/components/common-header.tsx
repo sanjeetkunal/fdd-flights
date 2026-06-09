@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { BellRing, Building2, Plane } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { BellRing, Building2, LayoutDashboard, LogOut, Plane } from "lucide-react";
 
 import { Button } from "../components/ui/button";
 import { cn } from "../lib/utils";
@@ -16,6 +16,7 @@ const navItems = [
 ];
 export function CommonHeader() {
   const pathname = usePathname();
+  const router = useRouter();
 
   if (pathname === "/login") {
     return null;
@@ -62,6 +63,26 @@ export function CommonHeader() {
           <Button variant="ghost" size="icon" className="relative">
             <BellRing className="h-4 w-4" />
             <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-destructive" />
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => router.push("/dashboard")}
+            className="hidden cursor-pointer items-center gap-2 text-sm font-medium md:inline-flex"
+          >
+            <LayoutDashboard className="h-4 w-4" />
+            Dashboard
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => router.push("/login")}
+            className="hidden cursor-pointer items-center gap-2 text-sm font-medium sm:inline-flex"
+          >
+            <LogOut className="h-4 w-4" />
+            Logout
           </Button>
           <div className="hidden items-center gap-2 rounded-full border border-border/60 bg-background/80 px-3 py-1 text-xs font-medium sm:flex">
             <Building2 className="h-3.5 w-3.5 text-primary" />

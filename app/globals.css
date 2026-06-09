@@ -67,7 +67,8 @@ body {
   min-height: 100vh;
   background: var(--gradient-surface);
   color: var(--foreground);
-  font-family: var(--font-manrope), sans-serif;
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+   font-feature-settings: "ss01", "cv11";
 }
 
 a,

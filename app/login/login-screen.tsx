@@ -6,20 +6,21 @@ import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import {
   ArrowRight,
+  Earth,
   Eye,
   LockKeyhole,
   Mail,
   Plane,
-  Shield,
   ShieldCheck,
+  TrendingUp,
 } from "lucide-react";
 
 import { Checkbox } from "../components/ui/checkbox";
 
 const stats = [
-  { value: "180+", label: "Destinations" },
-  { value: "12k+", label: "Agents Onboard" },
-  { value: "IATA", label: "Certified" },
+  { value: "180+", label: "Destinations", icon: Earth },
+  { value: "12k+", label: "Agents Onboard", icon: TrendingUp },
+  { value: "IATA", label: "Certified", icon: ShieldCheck },
 ];
 
 const DEMO_EMAIL = "demo@skyblockb2b.com";
@@ -53,10 +54,10 @@ export function LoginScreen() {
         <div className="relative hidden overflow-hidden lg:block">
           <Image
             src="/login-hero.jpg"
-            alt="Airplane flying above clouds at sunset"
+            alt="Aircraft flying above sunset clouds"
             fill
             priority
-            className="object-cover object-center"
+            className="absolute inset-0 h-full w-full object-cover"
           />
           <div
             className="absolute inset-0"
@@ -65,54 +66,61 @@ export function LoginScreen() {
                 "linear-gradient(135deg, color-mix(in oklab, var(--primary) 75%, transparent) 0%, color-mix(in oklab, var(--magenta) 45%, transparent) 55%, color-mix(in oklab, var(--sunset) 40%, transparent) 100%)",
             }}
           />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(155,92,255,0.34),transparent_36%),radial-gradient(circle_at_top_right,rgba(34,122,255,0.24),transparent_30%),radial-gradient(circle_at_bottom_left,rgba(255,186,61,0.18),transparent_22%)]" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(9,14,40,0.04)_0%,rgba(28,6,48,0.1)_50%,rgba(28,6,48,0.28)_100%)]" />
+          <div
+            className="absolute -left-24 top-24 h-72 w-72 rounded-full blur-3xl"
+            style={{ background: "var(--magenta)", opacity: 0.45 }}
+          />
+          <div
+            className="absolute -bottom-20 -right-10 h-96 w-96 rounded-full blur-3xl"
+            style={{ background: "var(--sunset)", opacity: 0.5 }}
+          />
 
-          <div className="relative z-10 flex h-full flex-col justify-between px-[clamp(1.5rem,2vw,2.5rem)] py-[clamp(1.4rem,1.8vw,2rem)] text-white">
-            <div className="flex items-center gap-3">
-              <div className="flex h-[clamp(2.1rem,2.2vw,2.5rem)] w-[clamp(2.1rem,2.2vw,2.5rem)] items-center justify-center rounded-2xl border border-white/20 bg-white/12 shadow-[0_14px_28px_rgba(38,9,77,0.18)] backdrop-blur-md">
-                <Plane className="h-4 w-4" />
+          <div className="relative z-10 flex h-full flex-col justify-between p-12 text-primary-foreground">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 backdrop-blur-md ring-1 ring-white/30">
+                <Plane className="h-5 w-5 -rotate-45" />
               </div>
-              <span className="text-[clamp(1.15rem,1.5vw,1.5rem)] font-semibold tracking-tight">
-                SkyBlock-B2B
+              <span className="text-lg font-semibold tracking-tight">
+                SkyBlock<span className="opacity-70">·B2B</span>
               </span>
             </div>
 
-            <div className="flex max-w-[clamp(24rem,38vw,34rem)] flex-1 flex-col justify-center">
-              <div className="inline-flex w-fit items-center gap-2 rounded-full border border-white/16 bg-white/14 px-[clamp(0.8rem,1vw,1rem)] py-[clamp(0.3rem,0.5vw,0.4rem)] text-[clamp(0.62rem,0.72vw,0.76rem)] font-semibold text-white/92 backdrop-blur-md">
-                <span className="h-2 w-2 rounded-full bg-emerald-300 shadow-[0_0_12px_rgba(110,231,183,0.9)]" />
-                Live inventory - 240+ carriers
-              </div>
+            <div className="max-w-md space-y-6">
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-medium backdrop-blur-md ring-1 ring-white/25">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-300" />
+                Live inventory · 240+ carriers
+              </span>
 
-              <div className="mt-[clamp(1rem,1.4vw,1.3rem)] max-w-xl">
-                <h1 className="max-w-[clamp(22rem,31vw,30rem)] font-[var(--font-sora)] text-[clamp(2rem,3vw,3.15rem)] font-semibold leading-[1.06] tracking-[-0.045em] text-white">
-                  Fixed-departure seats, group fares &amp; series blocks booked in seconds.
-                </h1>
-                <p className="mt-[clamp(0.8rem,1vw,1rem)] max-w-[clamp(19rem,24vw,25rem)] text-[clamp(0.84rem,0.95vw,1rem)] leading-[1.6] text-white/84">
-                  The trusted B2B portal where travel agents secure guaranteed inventory on the
-                  world&apos;s busiest routes.
-                </p>
-              </div>
+              <h1 className="font-[var(--font-sora)] text-4xl font-semibold leading-tight tracking-tight md:text-5xl">
+                Fixed-departure seats, group fares &amp; series blocks — booked in seconds.
+              </h1>
+              <p className="text-base text-white/85">
+                The trusted B2B portal where travel agents secure guaranteed inventory on the
+                world&apos;s busiest routes.
+              </p>
 
-              <div className="mt-[clamp(1rem,1.5vw,1.5rem)] flex flex-wrap gap-2.5">
-                {stats.map((stat) => (
+              <div className="grid grid-cols-3 gap-3 pt-2">
+                {stats.map((stat) => {
+                  const Icon = stat.icon;
+
+                  return (
                   <div
                     key={stat.label}
-                    className="min-w-[clamp(6.4rem,8vw,7.4rem)] rounded-[1.15rem] border border-white/14 bg-white/12 px-[clamp(0.8rem,1vw,1rem)] py-[clamp(0.7rem,0.9vw,0.9rem)] shadow-[0_18px_40px_rgba(90,18,64,0.16)] backdrop-blur-md"
+                    className="rounded-2xl bg-white/10 p-4 backdrop-blur-md ring-1 ring-white/20"
                   >
-                    <p className="text-[clamp(1.35rem,1.8vw,1.8rem)] font-semibold tracking-tight text-white">
-                      {stat.value}
-                    </p>
-                    <p className="mt-1 text-[clamp(0.58rem,0.7vw,0.72rem)] font-medium uppercase tracking-[0.08em] text-white/78">
+                    <Icon className="mb-2 h-4 w-4 opacity-90" />
+                    <div className="text-lg font-semibold">{stat.value}</div>
+                    <div className="text-[11px] uppercase tracking-wider text-white/75">
                       {stat.label}
-                    </p>
+                    </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
-            <p className="text-[clamp(0.7rem,0.8vw,0.85rem)] text-white/72">
-              (c) 2026 SkyBlock Aviation Services Pvt. Ltd.
+            <p className="text-xs text-white/70">
+              © 2026 SkyBlock Aviation Services Pvt. Ltd.
             </p>
           </div>
         </div>
@@ -142,7 +150,7 @@ export function LoginScreen() {
                     htmlFor="work-email"
                     className="mb-1.5 block text-[clamp(0.76rem,0.88vw,0.84rem)] font-semibold text-slate-800"
                   >
-                    Work email
+                    Email
                   </label>
                   <div className="relative">
                     <Mail className="pointer-events-none absolute left-3 top-1/2 h-[0.95rem] w-[0.95rem] -translate-y-1/2 text-slate-500" />
@@ -213,22 +221,6 @@ export function LoginScreen() {
                   <ArrowRight className="h-4 w-4" />
                 </button>
               </form>
-
-              <div className="my-[clamp(0.8rem,1vw,1rem)] flex items-center gap-3">
-                <div className="h-px flex-1 bg-slate-200" />
-                <span className="text-[clamp(0.58rem,0.68vw,0.68rem)] font-semibold uppercase tracking-[0.18em] text-slate-400">
-                  Or
-                </span>
-                <div className="h-px flex-1 bg-slate-200" />
-              </div>
-
-              <button
-                type="button"
-                className="flex h-[clamp(2.55rem,3vw,2.9rem)] w-full items-center justify-center gap-3 rounded-[clamp(0.85rem,1vw,1rem)] border border-[rgba(190,203,227,0.72)] bg-[rgba(244,247,253,0.92)] text-[clamp(0.8rem,0.92vw,0.9rem)] font-semibold text-slate-800 hover:bg-white"
-              >
-                <Shield className="h-4 w-4 text-indigo-700" />
-                Continue with SSO
-              </button>
 
               <p className="mt-[clamp(0.8rem,1vw,1rem)] text-center text-[clamp(0.72rem,0.82vw,0.8rem)] leading-5 text-slate-500">
                 New travel agency?{" "}
