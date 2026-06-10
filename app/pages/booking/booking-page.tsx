@@ -13,6 +13,8 @@ import {
   Users,
 } from "lucide-react";
 
+import { DobPickerField } from "./dob-picker-field";
+
 type BookingPageProps = {
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 };
@@ -33,7 +35,7 @@ function getCount(value: string | string[] | undefined, fallback: number) {
 }
 
 function formatPrice(value: number) {
-  return `₹${value.toLocaleString("en-IN")}`;
+  return `Rs. ${value.toLocaleString("en-IN")}`;
 }
 
 function buildPassengers(type: PassengerType, count: number) {
@@ -122,6 +124,7 @@ export async function BookingPage({ searchParams }: BookingPageProps) {
   const infantTotal = infants * infantFare;
   const serviceFee = 650;
   const grandTotal = adultTotal + childTotal + infantTotal + serviceFee;
+  const totalTravellers = adults + children + infants;
 
   const passengerCards = [
     ...buildPassengers("Adult", adults),
@@ -137,12 +140,45 @@ export async function BookingPage({ searchParams }: BookingPageProps) {
 
   return (
     <main className="min-h-[calc(100dvh-8rem)] bg-[#eef4ff] px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-7xl space-y-6">
+        <div className="rounded-[1.8rem] border border-[#d7e2f2] bg-white px-5 py-5 shadow-[0_18px_48px_rgba(62,92,144,0.06)] sm:px-6">
+          <div className="flex flex-wrap items-center gap-4">
+            {progressSteps.map((step, index) => (
+              <div key={step.label} className="flex items-center gap-4">
+                <div className="flex items-center gap-3">
+                  <span
+                    className={`grid h-10 w-10 place-items-center rounded-full text-sm font-semibold ${
+                      step.active
+                        ? "bg-[linear-gradient(90deg,#2f91f1_0%,#e641a4_54%,#ff7b42_100%)] text-white"
+                        : "bg-[#edf2fa] text-[#71829d]"
+                    }`}
+                  >
+                    {index + 1}
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-[#11203f]">{step.label}</p>
+                    <p className="text-xs text-[#6f7d97]">
+                      {index === 0
+                        ? "Traveller details"
+                        : index === 1
+                          ? "Payment and issue"
+                          : "Final confirmation"}
+                    </p>
+                  </div>
+                </div>
+                {index < progressSteps.length - 1 ? (
+                  <div className="hidden h-px w-12 bg-[#d7e2f2] lg:block" />
+                ) : null}
+              </div>
+            ))}
+          </div>
+        </div>
+
         <div className="grid gap-6 lg:grid-cols-[1.3fr_0.7fr]">
           <section className="space-y-6">
             <div className="overflow-hidden rounded-[2rem] border border-[#d7e2f2] bg-white shadow-[0_24px_60px_rgba(62,92,144,0.08)]">
               <div className="bg-[linear-gradient(90deg,#2f91f1_0%,#e641a4_54%,#ff7b42_100%)] px-6 py-6 text-white sm:px-8">
-                <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                <div className="flex flex-col gap-5">
                   <div>
                     <div className="inline-flex items-center gap-2 rounded-full bg-white/14 px-3 py-1 text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-white/90">
                       <ShieldCheck className="h-3.5 w-3.5" />
@@ -156,64 +192,31 @@ export async function BookingPage({ searchParams }: BookingPageProps) {
                       booking workspace built for travel agents.
                     </p>
                   </div>
-
-                  <div className="grid gap-3 sm:grid-cols-3">
-                    <div className="rounded-2xl bg-white/12 px-4 py-3 backdrop-blur-md ring-1 ring-white/20">
-                      <div className="text-[0.68rem] uppercase tracking-[0.14em] text-white/75">
-                        Airline
-                      </div>
-                      <div className="mt-1 text-lg font-semibold">
-                        {airline} <span className="text-white/75">({code})</span>
-                      </div>
-                    </div>
-                    <div className="rounded-2xl bg-white/12 px-4 py-3 backdrop-blur-md ring-1 ring-white/20">
-                      <div className="text-[0.68rem] uppercase tracking-[0.14em] text-white/75">
-                        Travel date
-                      </div>
-                      <div className="mt-1 text-lg font-semibold">{date}</div>
-                    </div>
-                    <div className="rounded-2xl bg-white/12 px-4 py-3 backdrop-blur-md ring-1 ring-white/20">
-                      <div className="text-[0.68rem] uppercase tracking-[0.14em] text-white/75">
-                        Traveller mix
-                      </div>
-                      <div className="mt-1 text-lg font-semibold">
-                        {adults + children + infants} Pax
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
 
-              <div className="px-6 py-6 sm:px-8">
-                <div className="flex flex-wrap items-center gap-4 rounded-[1.6rem] border border-[#e7edf8] bg-[#fbfdff] px-4 py-4">
-                  {progressSteps.map((step, index) => (
-                    <div key={step.label} className="flex items-center gap-4">
-                      <div className="flex items-center gap-3">
-                        <span
-                          className={`grid h-9 w-9 place-items-center rounded-full text-sm font-semibold ${
-                            step.active
-                              ? "bg-[linear-gradient(90deg,#2f91f1_0%,#e641a4_54%,#ff7b42_100%)] text-white"
-                              : "bg-[#edf2fa] text-[#71829d]"
-                          }`}
-                        >
-                          {index + 1}
-                        </span>
-                        <div>
-                          <p className="text-sm font-semibold text-[#11203f]">{step.label}</p>
-                          <p className="text-xs text-[#6f7d97]">
-                            {index === 0
-                              ? "Traveller details"
-                              : index === 1
-                                ? "Payment and issue"
-                                : "Final confirmation"}
-                          </p>
-                        </div>
-                      </div>
-                      {index < progressSteps.length - 1 ? (
-                        <div className="hidden h-px w-10 bg-[#d7e2f2] sm:block" />
-                      ) : null}
-                    </div>
-                  ))}
+              <div className="grid gap-4 px-6 py-6 sm:px-8 md:grid-cols-3">
+                <div className="rounded-[1.4rem] border border-[#e7edf8] bg-[#fbfdff] px-4 py-4">
+                  <div className="text-[0.68rem] uppercase tracking-[0.14em] text-[#7a89a4]">
+                    Airline
+                  </div>
+                  <div className="mt-1 text-lg font-semibold text-[#11203f]">
+                    {airline} <span className="text-[#6f7d97]">({code})</span>
+                  </div>
+                </div>
+                <div className="rounded-[1.4rem] border border-[#e7edf8] bg-[#fbfdff] px-4 py-4">
+                  <div className="text-[0.68rem] uppercase tracking-[0.14em] text-[#7a89a4]">
+                    Travel date
+                  </div>
+                  <div className="mt-1 text-lg font-semibold text-[#11203f]">{date}</div>
+                </div>
+                <div className="rounded-[1.4rem] border border-[#e7edf8] bg-[#fbfdff] px-4 py-4">
+                  <div className="text-[0.68rem] uppercase tracking-[0.14em] text-[#7a89a4]">
+                    Traveller mix
+                  </div>
+                  <div className="mt-1 text-lg font-semibold text-[#11203f]">
+                    {totalTravellers} Pax
+                  </div>
                 </div>
               </div>
             </div>
@@ -282,11 +285,10 @@ export async function BookingPage({ searchParams }: BookingPageProps) {
                             placeholder="Enter last name"
                           />
                         </div>
-                        <InputField
+                        <DobPickerField
                           label="Date of birth"
                           name={`${passenger.id}-dob`}
-                          type="date"
-                          placeholder="Select DOB"
+                          passengerType={passenger.type}
                         />
                       </div>
                     </div>
@@ -404,28 +406,45 @@ export async function BookingPage({ searchParams }: BookingPageProps) {
                 Selected flight
               </div>
 
-              <div className="mt-4 rounded-[1.4rem] bg-[#f8fbff] p-4">
+              <div className="mt-4 rounded-[1.4rem] border border-[#e7edf8] bg-[#fbfdff] p-4">
                 <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-lg font-semibold text-[#11203f]">
-                      {airline} <span className="text-sm text-[#6f7d97]">({code})</span>
-                    </p>
-                    <p className="mt-1 text-sm text-[#6f7d97]">Fixed departure · B2B net fare</p>
+                  <div className="flex min-w-0 items-start gap-3">
+                    <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-[#1c4ed8] text-sm font-bold text-white">
+                      {code}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="truncate text-base font-semibold text-[#11203f]">{airline}</p>
+                      <p className="mt-1 text-sm text-[#6f7d97]">Business</p>
+                    </div>
                   </div>
                   <div className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
                     Live seats
                   </div>
                 </div>
 
-                <div className="mt-5 grid grid-cols-[1fr_auto_1fr] items-end gap-3">
+                <div className="mt-5 grid grid-cols-[1fr_auto_1fr] items-center gap-4">
                   <div>
-                    <p className="text-2xl font-semibold tracking-[-0.05em] text-[#11203f]">{from}</p>
-                    <p className="text-xs uppercase tracking-[0.14em] text-[#7a89a4]">Origin</p>
+                    <p className="text-lg font-semibold text-[#11203f]">{from}</p>
+                    <p className="mt-1 text-xs uppercase tracking-[0.14em] text-[#7a89a4]">
+                      Departure
+                    </p>
                   </div>
-                  <div className="pb-2 text-center text-sm font-medium text-[#7282bf]">→</div>
+                  <div className="flex flex-col items-center gap-1 text-center">
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[#7a89a4]">
+                      Direct
+                    </span>
+                    <div className="flex items-center gap-2 text-[#7282bf]">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#2f91f1]" />
+                      <span className="text-xs">✈</span>
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#ff7b42]" />
+                    </div>
+                    <span className="text-xs text-[#6f7d97]">{date}</span>
+                  </div>
                   <div className="text-right">
-                    <p className="text-2xl font-semibold tracking-[-0.05em] text-[#11203f]">{to}</p>
-                    <p className="text-xs uppercase tracking-[0.14em] text-[#7a89a4]">Destination</p>
+                    <p className="text-lg font-semibold text-[#11203f]">{to}</p>
+                    <p className="mt-1 text-xs uppercase tracking-[0.14em] text-[#7a89a4]">
+                      Arrival
+                    </p>
                   </div>
                 </div>
 
@@ -443,7 +462,7 @@ export async function BookingPage({ searchParams }: BookingPageProps) {
                       Pax
                     </div>
                     <p className="mt-2 text-sm font-semibold text-[#11203f]">
-                      {adults + children + infants} Travellers
+                      {totalTravellers} Travellers
                     </p>
                   </div>
                 </div>
