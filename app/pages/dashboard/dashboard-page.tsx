@@ -1,36 +1,15 @@
-import Link from "next/link";
 import {
-  BarChart3,
   CalendarDays,
   ChevronDown,
-  ChevronRight,
   CircleDollarSign,
-  CreditCard,
   Gauge,
-  Grid2x2,
-  HelpCircle,
   Plane,
   Receipt,
-  Settings,
-  Ticket,
   TrendingDown,
   TrendingUp,
   WalletCards,
 } from "lucide-react";
-
-const sidebarGroups = [
-  {
-    title: "Flight",
-    icon: Plane,
-    expandable: true,
-    items: ["Add New Flight", "Edit Flights", "Flight Schedule", "Cancelled Flights"],
-  },
-  { title: "Bookings", icon: Ticket, expandable: true },
-  { title: "Payments", icon: CreditCard, expandable: true },
-  { title: "Analytics", icon: BarChart3, expandable: true },
-  { title: "Settings", icon: Settings, expandable: false },
-  { title: "Help", icon: HelpCircle, expandable: false },
-];
+import { DashboardSidebar } from "./dashboard-sidebar";
 
 const statCards = [
   {
@@ -120,7 +99,7 @@ function MiniLineChart() {
     .join(" ");
 
   return (
-    <svg viewBox="0 0 100 100" className="h-52 w-full">
+    <svg viewBox="0 0 100 100" className="h-40 w-full">
       <defs>
         <linearGradient id="profitFill" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.32" />
@@ -148,13 +127,13 @@ function MiniLineChart() {
 
 function ExpenseBars() {
   return (
-    <div className="mt-5 flex h-52 items-end gap-4">
+    <div className="mt-3 flex h-40 items-end gap-3">
       {expenseBars.map((value, index) => (
         <div key={index} className="flex flex-1 flex-col items-center gap-3">
           <div className="w-full rounded-full bg-[#eef2fb]">
             <div
               className="w-full rounded-full bg-[linear-gradient(180deg,#ffe36e_0%,#f4cc23_100%)]"
-              style={{ height: `${value * 1.8}px` }}
+              style={{ height: `${value * 1.35}px` }}
             />
           </div>
           <span className="text-xs font-medium text-[#7c8aa6]">
@@ -168,105 +147,40 @@ function ExpenseBars() {
 
 export function DashboardPage() {
   return (
-    <main className="min-h-screen bg-[#eef4ff] px-4 py-6 sm:px-6 lg:px-8">
-      <div className="mx-auto flex w-full max-w-[1500px] gap-6">
-        <aside className="hidden w-[250px] shrink-0 rounded-[2rem] border border-[#d8e2f2] bg-white p-5 shadow-[0_18px_48px_rgba(62,92,144,0.08)] xl:flex xl:flex-col">
-          <Link
-            href="/dashboard"
-            className="flex items-center gap-3 rounded-2xl bg-[linear-gradient(135deg,#29114e_0%,#4d267f_100%)] px-4 py-4 text-sm font-semibold text-white shadow-[0_18px_30px_rgba(53,19,98,0.24)]"
-          >
-            <Grid2x2 className="h-4 w-4" />
-            Dashboard
-          </Link>
+    <main className="min-h-screen bg-[#eef4ff] px-3 py-4 sm:px-5 lg:px-6">
+      <div className="mx-auto flex w-full max-w-[1440px] gap-4">
+        <DashboardSidebar />
 
-          <div className="mt-5 space-y-2">
-            {sidebarGroups.map((group, index) => {
-              const Icon = group.icon;
-
-              return (
-                <div key={group.title}>
-                  <button
-                    type="button"
-                    className="flex w-full cursor-pointer items-center justify-between rounded-2xl px-3 py-3 text-left text-sm font-medium text-[#1b2c4d] transition hover:bg-[#f5f8ff]"
-                  >
-                    <span className="flex items-center gap-3">
-                      <Icon className="h-4 w-4 text-[#1b2c4d]" />
-                      {group.title}
-                    </span>
-                    {group.expandable ? (
-                      index === 0 ? (
-                        <ChevronDown className="h-4 w-4 text-[#6e7d98]" />
-                      ) : (
-                        <ChevronRight className="h-4 w-4 text-[#6e7d98]" />
-                      )
-                    ) : null}
-                  </button>
-
-                  {index === 0 ? (
-                    <div className="ml-4 border-l border-[#dbe4f3] pl-5">
-                      {group.items?.map((item) => (
-                        <div
-                          key={item}
-                          className="relative py-4 text-sm font-medium text-[#304563] before:absolute before:-left-5 before:top-1/2 before:h-px before:w-4 before:-translate-y-1/2 before:bg-[#dbe4f3]"
-                        >
-                          {item}
-                        </div>
-                      ))}
-                    </div>
-                  ) : null}
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="mt-auto space-y-5 pt-6">
-            <div className="overflow-hidden rounded-[1.75rem] bg-[linear-gradient(180deg,#ffe76c_0%,#ffc935_100%)] p-5 text-center shadow-[0_20px_34px_rgba(255,197,58,0.28)]">
-              <div className="mx-auto grid h-20 w-20 place-items-center rounded-full bg-white/45 text-[#1e3a8a]">
-                <Plane className="h-10 w-10 -rotate-45" />
-              </div>
-              <p className="mt-4 text-lg font-semibold text-[#3f2a06]">Enjoy Savings of 25% or Higher</p>
-            </div>
-
-            <button
-              type="button"
-              className="flex w-full cursor-pointer items-center gap-3 rounded-2xl px-3 py-3 text-left text-sm font-medium text-[#1b2c4d] transition hover:bg-[#f5f8ff]"
-            >
-              <Plane className="h-4 w-4 rotate-180 text-[#1b2c4d]" />
-              Log Out
-            </button>
-          </div>
-        </aside>
-
-        <section className="flex-1 space-y-6">
-          <div className="flex flex-col gap-5 rounded-[2rem] border border-[#d8e2f2] bg-white p-6 shadow-[0_18px_48px_rgba(62,92,144,0.08)] lg:flex-row lg:items-start lg:justify-between">
+        <section className="min-w-0 flex-1 space-y-4">
+          <div className="flex flex-col gap-4 rounded-3xl border border-[#d8e2f2] bg-white p-5 shadow-[0_14px_36px_rgba(62,92,144,0.07)] lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <p className="font-[var(--font-sora)] text-[clamp(2rem,3vw,2.8rem)] font-semibold tracking-[-0.05em] text-[#2c4bcf]">
+              <p className="font-[var(--font-sora)] text-[clamp(1.65rem,2.3vw,2.15rem)] font-semibold tracking-[-0.04em] text-[#2c4bcf]">
                 Welcome! <span className="text-[#101a34]">Robert Fox</span>
               </p>
-              <p className="mt-2 max-w-2xl text-[1.02rem] leading-7 text-[#697894]">
+              <p className="mt-1.5 max-w-2xl text-sm leading-6 text-[#697894]">
                 Manage your flight booking operations with ease and efficiency across fixed departures,
                 group seat blocks, and ongoing agency fulfilment.
               </p>
             </div>
 
             <div className="shrink-0 text-right">
-              <p className="text-4xl font-semibold tracking-[-0.05em] text-[#101a34]">20:00 PM</p>
-              <p className="mt-2 text-xl text-[#697894]">15 February, 2024</p>
+              <p className="text-2xl font-semibold tracking-[-0.04em] text-[#101a34]">20:00 PM</p>
+              <p className="mt-1 text-sm text-[#697894]">15 February, 2024</p>
             </div>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-4 2xl:grid-cols-4">
             {statCards.map((card) => {
               const Icon = card.icon;
 
               return (
                 <article
                   key={card.title}
-                  className={`relative overflow-hidden rounded-[1.8rem] p-5 shadow-[0_18px_42px_rgba(62,92,144,0.10)] before:absolute before:inset-0 before:content-[''] ${card.bg} ${card.glow}`}
+                  className={`relative overflow-hidden rounded-2xl p-4 shadow-[0_12px_30px_rgba(62,92,144,0.09)] before:absolute before:inset-0 before:content-[''] ${card.bg} ${card.glow}`}
                 >
                   <div className="relative z-10">
                     <div className="flex items-start justify-between gap-3">
-                      <div className="grid h-14 w-14 place-items-center rounded-full bg-white/80 text-[#5342d4] shadow-sm">
+                      <div className="grid h-10 w-10 place-items-center rounded-xl bg-white/80 text-[#5342d4] shadow-sm">
                         <Icon className="h-5 w-5" />
                       </div>
                       <div
@@ -285,12 +199,12 @@ export function DashboardPage() {
                       </div>
                     </div>
 
-                    <div className="mt-8">
-                      <p className={`text-base ${card.darkText ? "text-[#31456d]" : "text-white/88"}`}>
+                    <div className="mt-5">
+                      <p className={`text-sm ${card.darkText ? "text-[#31456d]" : "text-white/88"}`}>
                         {card.title}
                       </p>
                       <p
-                        className={`mt-2 text-[clamp(2rem,2.4vw,2.3rem)] font-semibold tracking-[-0.05em] ${
+                        className={`mt-1 text-[clamp(1.55rem,2vw,1.9rem)] font-semibold tracking-[-0.04em] ${
                           card.darkText ? "text-[#101a34]" : "text-white"
                         }`}
                       >
@@ -303,11 +217,11 @@ export function DashboardPage() {
             })}
           </div>
 
-          <div className="grid gap-4 xl:grid-cols-[1.3fr_1fr_1fr]">
-            <section className="rounded-[1.8rem] border border-[#d8e2f2] bg-white p-5 shadow-[0_18px_48px_rgba(62,92,144,0.08)]">
+          <div className="grid gap-4 xl:grid-cols-[1.2fr_0.9fr_0.9fr]">
+            <section className="rounded-2xl border border-[#d8e2f2] bg-white p-4 shadow-[0_14px_36px_rgba(62,92,144,0.07)]">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h2 className="font-[var(--font-sora)] text-2xl font-semibold tracking-[-0.04em] text-[#101a34]">
+                  <h2 className="font-[var(--font-sora)] text-xl font-semibold tracking-[-0.03em] text-[#101a34]">
                     Total Profit
                   </h2>
                   <p className="mt-1 text-sm text-[#6f7d97]">1 January - 31 December</p>
@@ -318,9 +232,9 @@ export function DashboardPage() {
                 </button>
               </div>
 
-              <div className="mt-4 rounded-[1.5rem] bg-[#fafbff] p-4">
-                <div className="rounded-2xl bg-white px-4 py-3 shadow-[0_12px_28px_rgba(62,92,144,0.06)]">
-                  <p className="text-3xl font-semibold tracking-[-0.05em] text-[#101a34]">₹10,55,000</p>
+              <div className="mt-3 rounded-xl bg-[#fafbff] p-3">
+                <div className="rounded-xl bg-white px-3 py-2.5 shadow-[0_10px_24px_rgba(62,92,144,0.05)]">
+                  <p className="text-2xl font-semibold tracking-[-0.04em] text-[#101a34]">₹10,55,000</p>
                   <p className="mt-1 text-sm text-[#6f7d97]">June 2023</p>
                 </div>
                 <MiniLineChart />
@@ -332,11 +246,11 @@ export function DashboardPage() {
               </div>
             </section>
 
-            <section className="rounded-[1.8rem] border border-[#d8e2f2] bg-white p-5 shadow-[0_18px_48px_rgba(62,92,144,0.08)]">
+            <section className="rounded-2xl border border-[#d8e2f2] bg-white p-4 shadow-[0_14px_36px_rgba(62,92,144,0.07)]">
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-lg font-semibold text-[#101a34]">Total Expense</p>
-                  <p className="mt-1 text-3xl font-semibold tracking-[-0.05em] text-[#101a34]">₹5,98,737</p>
+                  <p className="mt-1 text-2xl font-semibold tracking-[-0.04em] text-[#101a34]">₹5,98,737</p>
                 </div>
                 <button className="inline-flex items-center gap-2 rounded-xl border border-[#dbe4f3] px-4 py-2 text-sm font-medium text-[#5f6f8b]">
                   Last 6 Month
@@ -344,15 +258,15 @@ export function DashboardPage() {
                 </button>
               </div>
 
-              <div className="rounded-[1.5rem] bg-[#fafbff] p-4">
+              <div className="rounded-xl bg-[#fafbff] p-3">
                 <ExpenseBars />
               </div>
             </section>
 
-            <section className="rounded-[1.8rem] border border-[#d8e2f2] bg-white p-5 shadow-[0_18px_48px_rgba(62,92,144,0.08)]">
+            <section className="rounded-2xl border border-[#d8e2f2] bg-white p-4 shadow-[0_14px_36px_rgba(62,92,144,0.07)]">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h2 className="font-[var(--font-sora)] text-2xl font-semibold tracking-[-0.04em] text-[#101a34]">
+                  <h2 className="font-[var(--font-sora)] text-xl font-semibold tracking-[-0.03em] text-[#101a34]">
                     Analytics
                   </h2>
                 </div>
@@ -362,8 +276,8 @@ export function DashboardPage() {
                 </button>
               </div>
 
-              <div className="mt-6 grid gap-5 md:grid-cols-[1fr_1.05fr] xl:grid-cols-1 2xl:grid-cols-[1fr_1.05fr]">
-                <div className="space-y-4 text-sm text-[#60718e]">
+              <div className="mt-4 grid gap-4 md:grid-cols-[1fr_1.05fr] xl:grid-cols-1 2xl:grid-cols-[1fr_1.05fr]">
+                <div className="space-y-3 text-xs text-[#60718e]">
                   <div className="flex items-start gap-3">
                     <span className="mt-1 h-3 w-3 rounded-full bg-[#7c3aed]" />
                     <div>
@@ -389,15 +303,15 @@ export function DashboardPage() {
 
                 <div className="grid place-items-center">
                   <div
-                    className="grid h-60 w-60 place-items-center rounded-full"
+                    className="grid h-40 w-40 place-items-center rounded-full"
                     style={{
                       background:
                         "conic-gradient(#6d28d9 0 38%, #8ff3d7 38% 66%, #4361ee 66% 100%)",
                     }}
                   >
-                    <div className="grid h-38 w-38 place-items-center rounded-full bg-white text-center shadow-[inset_0_0_0_1px_rgba(219,228,243,0.8)]">
-                      <span className="text-base font-medium text-[#60718e]">Total</span>
-                      <span className="text-4xl font-semibold tracking-[-0.05em] text-[#101a34]">40%</span>
+                    <div className="grid h-24 w-24 place-items-center rounded-full bg-white text-center shadow-[inset_0_0_0_1px_rgba(219,228,243,0.8)]">
+                      <span className="text-xs font-medium text-[#60718e]">Total</span>
+                      <span className="text-2xl font-semibold tracking-[-0.04em] text-[#101a34]">40%</span>
                     </div>
                   </div>
                 </div>
@@ -406,9 +320,9 @@ export function DashboardPage() {
           </div>
 
           <div className="grid gap-4 xl:grid-cols-[1.2fr_1fr]">
-            <section className="rounded-[1.8rem] border border-[#d8e2f2] bg-white p-5 shadow-[0_18px_48px_rgba(62,92,144,0.08)]">
+            <section className="min-w-0 rounded-2xl border border-[#d8e2f2] bg-white p-4 shadow-[0_14px_36px_rgba(62,92,144,0.07)]">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                <h2 className="font-[var(--font-sora)] text-2xl font-semibold tracking-[-0.04em] text-[#101a34]">
+                <h2 className="font-[var(--font-sora)] text-xl font-semibold tracking-[-0.03em] text-[#101a34]">
                   All Booking
                 </h2>
                 <button className="inline-flex items-center gap-2 rounded-xl border border-[#dbe4f3] px-4 py-2 text-sm font-medium text-[#5f6f8b]">
@@ -429,8 +343,8 @@ export function DashboardPage() {
                 ))}
               </div>
 
-              <div className="mt-5 overflow-hidden rounded-[1.5rem] border border-[#ebf0f9]">
-                <div className="grid grid-cols-[1.35fr_1fr_1fr_0.8fr] gap-4 bg-[#f8fbff] px-5 py-4 text-[0.72rem] font-semibold uppercase tracking-[0.14em] text-[#6f7d97]">
+              <div className="mt-4 overflow-x-auto rounded-xl border border-[#ebf0f9]">
+                <div className="grid min-w-[720px] grid-cols-[1.35fr_1fr_1fr_0.8fr] gap-4 bg-[#f8fbff] px-4 py-3 text-[0.68rem] font-semibold uppercase tracking-[0.12em] text-[#6f7d97]">
                   <span>Destination</span>
                   <span>Duration</span>
                   <span>Booking Date</span>
@@ -440,10 +354,10 @@ export function DashboardPage() {
                   {bookingRows.map((row) => (
                     <div
                       key={`${row.destination}-${row.bookingDate}`}
-                      className="grid grid-cols-[1.35fr_1fr_1fr_0.8fr] gap-4 px-5 py-4"
+                      className="grid min-w-[720px] grid-cols-[1.35fr_1fr_1fr_0.8fr] gap-4 px-4 py-3"
                     >
                       <div>
-                        <p className="text-lg font-semibold tracking-[-0.03em] text-[#101a34]">
+                        <p className="text-base font-semibold tracking-[-0.02em] text-[#101a34]">
                           {row.destination}
                         </p>
                         <p className="mt-1 text-sm text-[#6f7d97]">
@@ -472,9 +386,9 @@ export function DashboardPage() {
               </div>
             </section>
 
-            <section className="rounded-[1.8rem] border border-[#d8e2f2] bg-white p-5 shadow-[0_18px_48px_rgba(62,92,144,0.08)]">
+            <section className="rounded-2xl border border-[#d8e2f2] bg-white p-4 shadow-[0_14px_36px_rgba(62,92,144,0.07)]">
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                <h2 className="font-[var(--font-sora)] text-2xl font-semibold tracking-[-0.04em] text-[#101a34]">
+                <h2 className="font-[var(--font-sora)] text-xl font-semibold tracking-[-0.03em] text-[#101a34]">
                   Flight Schedule
                 </h2>
                 <button className="inline-flex items-center gap-2 rounded-xl bg-[linear-gradient(135deg,#7c3aed_0%,#8b5cf6_100%)] px-4 py-3 text-sm font-semibold text-white shadow-[0_14px_24px_rgba(124,58,237,0.22)]">
@@ -500,21 +414,21 @@ export function DashboardPage() {
                 </div>
               </div>
 
-              <div className="mt-5 space-y-3">
+              <div className="mt-4 space-y-2">
                 {scheduleRows.map((item) => (
                   <div
                     key={`${item.day}-${item.date}`}
-                    className="flex items-center justify-between rounded-[1.4rem] border border-[#ebf0f9] bg-[#fbfdff] px-4 py-4"
+                    className="flex items-center justify-between rounded-xl border border-[#ebf0f9] bg-[#fbfdff] px-3 py-3"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="grid h-14 w-14 place-items-center rounded-2xl bg-white text-center shadow-[0_10px_24px_rgba(62,92,144,0.08)]">
+                      <div className="grid h-11 w-11 place-items-center rounded-xl bg-white text-center shadow-[0_8px_20px_rgba(62,92,144,0.07)]">
                         <span className="text-xs font-semibold uppercase text-[#8a96ad]">
                           {item.day}
                         </span>
                         <span className="text-lg font-semibold text-[#101a34]">{item.date}</span>
                       </div>
                       <div>
-                        <p className="text-lg font-semibold tracking-[-0.03em] text-[#101a34]">
+                        <p className="text-base font-semibold tracking-[-0.02em] text-[#101a34]">
                           {item.route}
                         </p>
                         <p className="mt-1 text-sm text-[#6f7d97]">Scheduled departure</p>

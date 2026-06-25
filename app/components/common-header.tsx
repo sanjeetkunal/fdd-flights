@@ -29,7 +29,11 @@ import { cn } from "../lib/utils";
 
 const navItems = [
   { href: "/", label: "Home", key: "home" as const },
-  { href: "/bookings", label: "My Bookings", key: "bookings" as const },
+  {
+    href: "/dashboard/bookings/my-bookings",
+    label: "My Bookings",
+    key: "bookings" as const,
+  },
 ];
 
 const walletItems = [
@@ -262,11 +266,17 @@ export function CommonHeader() {
                 <LayoutDashboard className="h-4 w-4" />
                 Dashboard
               </DropdownMenuItem>
-              <DropdownMenuItem className="rounded-xl px-3 py-2.5">
+              <DropdownMenuItem
+                className="cursor-pointer rounded-xl px-3 py-2.5"
+                onClick={() => router.push("/dashboard/profile")}
+              >
                 <UserRound className="h-4 w-4" />
                 My Profile
               </DropdownMenuItem>
-              <DropdownMenuItem className="rounded-xl px-3 py-2.5">
+              <DropdownMenuItem
+                className="cursor-pointer rounded-xl px-3 py-2.5"
+                onClick={() => router.push("/dashboard/settings")}
+              >
                 <Settings className="h-4 w-4" />
                 Account Settings
               </DropdownMenuItem>

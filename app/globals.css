@@ -63,6 +63,13 @@ html {
   background: var(--background);
 }
 
+@media (min-width: 900px) and (min-resolution: 1.49dppx) and (max-resolution: 1.51dppx) {
+  html {
+    /* Counter Windows 150% display scaling for the app's rem-based desktop UI. */
+    font-size: 85%;
+  }
+}
+
 body {
   min-height: 100vh;
   background: var(--gradient-surface);
@@ -85,4 +92,173 @@ input {
 ::selection {
   background: rgba(55, 126, 246, 0.2);
   color: var(--foreground);
+}
+
+@keyframes payment-result-enter {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes payment-icon-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.45) rotate(-12deg);
+  }
+  70% {
+    transform: scale(1.08) rotate(2deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+@keyframes payment-ring-expand {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.45);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.35);
+  }
+}
+
+@keyframes payment-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.86);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes payment-clock {
+  0%,
+  100% {
+    transform: rotate(-7deg);
+  }
+  50% {
+    transform: rotate(7deg);
+  }
+}
+
+@keyframes payment-result-bar {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes payment-pending-bar {
+  0% {
+    width: 15%;
+    transform: translateX(-100%);
+  }
+  100% {
+    width: 45%;
+    transform: translateX(250%);
+  }
+}
+
+@keyframes payment-spark {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+  45% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--spark-x), var(--spark-y)) scale(1);
+  }
+}
+
+.payment-result-enter {
+  animation: payment-result-enter 500ms ease-out both;
+}
+
+.payment-icon-pop {
+  animation: payment-icon-pop 600ms 120ms cubic-bezier(0.2, 0.85, 0.25, 1.2) both;
+}
+
+.payment-ring-expand {
+  animation: payment-ring-expand 900ms 180ms ease-out both;
+}
+
+.payment-pulse {
+  animation: payment-pulse 1.8s ease-in-out infinite;
+}
+
+.payment-clock {
+  animation: payment-clock 1.25s ease-in-out infinite;
+}
+
+.payment-result-bar {
+  animation: payment-result-bar 850ms 100ms ease-out both;
+}
+
+.payment-pending-bar {
+  animation: payment-pending-bar 1.5s ease-in-out infinite;
+}
+
+.payment-spark {
+  --spark-x: 0px;
+  --spark-y: 0px;
+  position: absolute;
+  height: 8px;
+  width: 8px;
+  border-radius: 999px;
+  animation: payment-spark 900ms 350ms ease-out both;
+}
+
+.payment-spark-one {
+  --spark-x: -22px;
+  --spark-y: -28px;
+  left: 24px;
+  top: 46px;
+}
+
+.payment-spark-two {
+  --spark-x: 24px;
+  --spark-y: -24px;
+  right: 22px;
+  top: 40px;
+}
+
+.payment-spark-three {
+  --spark-x: 27px;
+  --spark-y: 22px;
+  bottom: 28px;
+  right: 28px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .payment-result-enter,
+  .payment-icon-pop,
+  .payment-ring-expand,
+  .payment-pulse,
+  .payment-clock,
+  .payment-result-bar,
+  .payment-pending-bar,
+  .payment-spark {
+    animation: none;
+  }
+
+  .payment-result-bar,
+  .payment-pending-bar {
+    width: 100%;
+  }
 }

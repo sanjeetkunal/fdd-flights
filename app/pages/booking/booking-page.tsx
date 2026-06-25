@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Form from "next/form";
 import {
   BriefcaseBusiness,
   CalendarDays,
@@ -221,7 +222,7 @@ export async function BookingPage({ searchParams }: BookingPageProps) {
               </div>
             </div>
 
-            <form className="space-y-6">
+            <Form action="/payment/payment-gateway" className="space-y-6">
               <section className="rounded-[1.8rem] border border-[#d7e2f2] bg-white p-6 shadow-[0_18px_48px_rgba(62,92,144,0.06)] sm:p-7">
                 <div className="flex items-start gap-3">
                   <div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[linear-gradient(135deg,#2f91f1_0%,#e641a4_100%)] text-white">
@@ -396,7 +397,7 @@ export async function BookingPage({ searchParams }: BookingPageProps) {
                   Continue to purchase
                 </button>
               </div>
-            </form>
+            </Form>
           </section>
 
           <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">

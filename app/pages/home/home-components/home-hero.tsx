@@ -305,7 +305,7 @@ function PaxClassField({
             <span className="text-primary">
               <Users className="h-4 w-4" />
             </span>
-            Travellers & Class
+            
           </div>
           <div className="mt-1 flex items-center justify-between gap-3">
             <div className="min-w-0">
