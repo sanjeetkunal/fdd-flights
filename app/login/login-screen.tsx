@@ -3,13 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import {
   ArrowRight,
   Earth,
   Eye,
+  EyeOff,
   LockKeyhole,
-  Mail,
+  Phone,
   Plane,
   ShieldCheck,
   TrendingUp,
@@ -23,27 +24,50 @@ const stats = [
   { value: "IATA", label: "Certified", icon: ShieldCheck },
 ];
 
-const DEMO_EMAIL = "demo@skyblockb2b.com";
-const DEMO_PASSWORD = "demo123";
-
 export function LoginScreen() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
 
-    if (email.trim().toLowerCase() !== DEMO_EMAIL || password !== DEMO_PASSWORD) {
-      setError("Use demo@skyblockb2b.com and demo123 to continue.");
+    if (!username.trim() || !password) {
+      setError("Please enter your username and password.");
       return;
     }
 
     setIsSubmitting(true);
-    router.push("/");
+
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: username.trim(), password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setError(data.message ?? "Invalid credentials. Please try again.");
+        return;
+      }
+
+      const token: string = data.resData.token;
+      sessionStorage.setItem("auth_token", token);
+      sessionStorage.setItem("user_info", JSON.stringify(data.resData.user_info));
+      sessionStorage.setItem("menu_access", JSON.stringify(data.resData.menu_access));
+
+      router.push("/");
+    } catch {
+      setError("Network error. Please check your connection and try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -129,6 +153,19 @@ export function LoginScreen() {
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(130,180,255,0.22),transparent_28%),radial-gradient(circle_at_bottom_left,rgba(247,118,74,0.12),transparent_28%)]" />
 
           <div className="relative z-10 flex w-full max-w-[clamp(19.5rem,29vw,23rem)] flex-col justify-center">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <span className="text-[clamp(0.72rem,0.82vw,0.8rem)] text-slate-500">
+                New to SkyBlock?
+              </span>
+              <Link
+                href="/register"
+                className="inline-flex items-center gap-1.5 rounded-full border border-indigo-200 bg-white/80 px-4 py-1.5 text-[clamp(0.72rem,0.82vw,0.8rem)] font-semibold text-indigo-700 shadow-sm backdrop-blur-sm hover:bg-white hover:text-indigo-800"
+              >
+                Register agency
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            </div>
+
             <div className="rounded-[clamp(1.2rem,1.6vw,1.65rem)] border border-white/70 bg-white/92 px-[clamp(1rem,1.4vw,1.75rem)] py-[clamp(1rem,1.4vw,1.5rem)] shadow-[0_26px_80px_rgba(74,91,139,0.18)] backdrop-blur-xl">
               <div className="inline-flex items-center rounded-full bg-[linear-gradient(90deg,#3b82f6_0%,#f97316_100%)] px-[clamp(0.75rem,1vw,0.95rem)] py-1 text-[clamp(0.56rem,0.62vw,0.66rem)] font-bold uppercase tracking-[0.14em] text-white">
                 Agent Portal
@@ -147,20 +184,21 @@ export function LoginScreen() {
               >
                 <div>
                   <label
-                    htmlFor="work-email"
+                    htmlFor="username"
                     className="mb-1.5 block text-[clamp(0.76rem,0.88vw,0.84rem)] font-semibold text-slate-800"
                   >
-                    Email
+                    Phone / Username
                   </label>
                   <div className="relative">
-                    <Mail className="pointer-events-none absolute left-3 top-1/2 h-[0.95rem] w-[0.95rem] -translate-y-1/2 text-slate-500" />
+                    <Phone className="pointer-events-none absolute left-3 top-1/2 h-[0.95rem] w-[0.95rem] -translate-y-1/2 text-slate-500" />
                     <input
-                      id="work-email"
-                      name="email"
-                      type="email"
-                      placeholder="agent@yourtravel.com"
-                      value={email}
-                      onChange={(event) => setEmail(event.target.value)}
+                      id="username"
+                      name="username"
+                      type="text"
+                      autoComplete="username"
+                      placeholder="Enter phone or username"
+                      value={username}
+                      onChange={(event) => setUsername(event.target.value)}
                       className="h-[clamp(2.55rem,3vw,2.9rem)] w-full rounded-[clamp(0.85rem,1vw,1rem)] border border-[rgba(183,197,222,0.48)] bg-[rgba(239,244,252,0.88)] pl-9 pr-4 text-[clamp(0.8rem,0.9vw,0.9rem)] text-slate-800 outline-none placeholder:text-slate-500 focus:border-[rgba(79,125,245,0.42)] focus:bg-white"
                     />
                   </div>
@@ -183,19 +221,26 @@ export function LoginScreen() {
                     <input
                       id="password"
                       name="password"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="current-password"
                       placeholder="**********"
                       value={password}
                       onChange={(event) => setPassword(event.target.value)}
                       className="h-[clamp(2.55rem,3vw,2.9rem)] w-full rounded-[clamp(0.85rem,1vw,1rem)] border border-[rgba(183,197,222,0.48)] bg-[rgba(239,244,252,0.88)] pl-9 pr-9 text-[clamp(0.8rem,0.9vw,0.9rem)] text-slate-800 outline-none placeholder:text-slate-500 focus:border-[rgba(79,125,245,0.42)] focus:bg-white"
                     />
-                    <Eye className="pointer-events-none absolute right-3 top-1/2 h-[0.95rem] w-[0.95rem] -translate-y-1/2 text-slate-500" />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700"
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-[0.95rem] w-[0.95rem]" />
+                      ) : (
+                        <Eye className="h-[0.95rem] w-[0.95rem]" />
+                      )}
+                    </button>
                   </div>
-                </div>
-
-                <div className="rounded-[0.95rem] border border-[#d8e3f5] bg-[#f5f8ff] px-3 py-2.5 text-[0.74rem] leading-5 text-[#52627e]">
-                  Demo login: <span className="font-semibold text-[#142546]">{DEMO_EMAIL}</span> /{" "}
-                  <span className="font-semibold text-[#142546]">{DEMO_PASSWORD}</span>
                 </div>
 
                 {error ? (
@@ -215,17 +260,17 @@ export function LoginScreen() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex h-[clamp(2.55rem,3vw,2.9rem)] w-full items-center justify-center gap-2 rounded-[clamp(0.85rem,1vw,1rem)] bg-[linear-gradient(90deg,#2592ef_0%,#ec4899_54%,#ff7b3c_100%)] text-[clamp(0.8rem,0.92vw,0.9rem)] font-semibold text-white shadow-[0_16px_34px_rgba(245,104,88,0.28)] hover:-translate-y-0.5"
+                  className="flex h-[clamp(2.55rem,3vw,2.9rem)] w-full items-center justify-center gap-2 rounded-[clamp(0.85rem,1vw,1rem)] bg-[linear-gradient(90deg,#2592ef_0%,#ec4899_54%,#ff7b3c_100%)] text-[clamp(0.8rem,0.92vw,0.9rem)] font-semibold text-white shadow-[0_16px_34px_rgba(245,104,88,0.28)] hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? "Redirecting..." : "Sign in to portal"}
+                  {isSubmitting ? "Signing in..." : "Sign in to portal"}
                   <ArrowRight className="h-4 w-4" />
                 </button>
               </form>
 
               <p className="mt-[clamp(0.8rem,1vw,1rem)] text-center text-[clamp(0.72rem,0.82vw,0.8rem)] leading-5 text-slate-500">
                 New travel agency?{" "}
-                <Link href="mailto:sales@skyblockb2b.com" className="font-semibold text-indigo-700">
-                  Request access
+                <Link href="/register" className="font-semibold text-indigo-700 hover:text-indigo-800">
+                  Register here
                 </Link>
               </p>
             </div>
